@@ -19,33 +19,28 @@ class test_add_contact(unittest.TestCase):
     
     def test_add_contact(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
-        self.open_contacts_page(wd)
         self.create_contact(wd, Contact(firstname="natalia", middlename="alex",
                                         lastname="gryaznova", nickname="natgry",
                                         title="sfe", company="emc",
                                         address="spb", home="-", mobile="-", work="-", fax="-",
                                         email="natgry@yandex.ru", email2="-", email3="-",
                                         homepage="-", group="[none]", address2="-", phone2="-", notes="-"))
-        self.return_to_home_page(wd)
         self.logout(wd)
 
     def test_add_empty_contact(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
-        self.open_contacts_page(wd)
         self.create_contact(wd, Contact(firstname="", middlename="",
                                         lastname="", nickname="",
                                         title="", company="",
                                         address="", home="", mobile="", work="", fax="",
                                         email="", email2="", email3="",
                                         homepage="", group="[none]", address2="", phone2="", notes=""))
-        self.return_to_home_page(wd)
         self.logout(wd)
 
     def create_contact(self, wd, contact):
+        self.open_contacts_page(wd)
         # fill contact form
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -121,6 +116,7 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit contact creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.return_to_home_page(wd)
 
     def return_to_home_page(self, wd):
         wd.find_element_by_link_text("home").click()
@@ -132,6 +128,7 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_link_text("Logout").click()
 
     def login(self, wd, username, password):
+        self.open_home_page(wd)
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
