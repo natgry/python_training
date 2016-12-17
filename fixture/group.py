@@ -8,7 +8,7 @@ class GroupHelper:
         wd.find_element_by_id("content").click()
 
     def create(self, group):
-        wd = self.wd
+        wd = self.app.wd
         self.open_groups_page()
         # init group creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[4]").click()
