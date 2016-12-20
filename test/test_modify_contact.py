@@ -2,7 +2,9 @@
 from model.contact import Contact
 
 
-def test_modify_first_contact(app):
+def test_modify_contact(app):
+    if app.contact.count() == 0:
+        app.contact.create(Contact(firstname="natalia", middlename="alexandrovna", lastname="gryaznova", email="-"))
     app.contact.modify_first_contact(Contact(firstname="natalia_upd", middlename="",
                                              lastname="gryaznova_upd", nickname="natgry_upd",
                                              title="sfe_upd", company="emc_upd",
@@ -12,8 +14,12 @@ def test_modify_first_contact(app):
 
 
 def test_modify_contact_name(app):
+    if app.contact.count() == 0:
+        app.contact.create(Contact(firstname="natalia", middlename="alexandrovna", lastname="gryaznova"))
     app.contact.modify_first_contact(Contact(firstname="natalia updated", middlename="", lastname="gryaznova updated",))
 
 
 def test_modify_contact_email(app):
+    if app.contact.count() == 0:
+        app.contact.create(Contact(firstname="natalia", middlename="alexandrovna", lastname="gryaznova", email="-"))
     app.contact.modify_first_contact(Contact(email="x@mail.ru"))

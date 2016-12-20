@@ -67,3 +67,8 @@ class ContactHelper:
         if not modify:
             wd.find_element_by_xpath("//select[@name='new_group']/option[text()='" + contact.group + "']").click()
 
+    def count(self):
+        wd = self.app.wd
+        self.app.open_home_page()
+        return len(wd.find_elements_by_name("selected[]"))
+
