@@ -1,3 +1,5 @@
+from model.contact import Contact
+
 class ContactHelper:
     def __init__(self, app):
         self.app = app
@@ -50,6 +52,7 @@ class ContactHelper:
         wd = self.app.wd
         self.change_field_value("firstname", contact.firstname)
         self.change_field_value("middlename", contact.middlename)
+        self.change_field_value("lastname", contact.lastname)
         self.change_field_value("nickname", contact.nickname)
         self.change_field_value("title", contact.title)
         self.change_field_value("company", contact.company)
@@ -72,4 +75,17 @@ class ContactHelper:
         wd = self.app.wd
         self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.app.open_home_page()
+        contacts = []
+        table = wd.find_elements_by_xpath("//table[@class='sortcompletecallback-applyZebra']//tr[@name='entry']")
+        for element in table:
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            rows = element.find_elements_by_xpath("td")
+            lastname = rows[1].text
+            firstname = rows[2].text
+            contacts.append(Contact(firstname=firstname, lastname=lastname, id=id))
+        return contacts
 
