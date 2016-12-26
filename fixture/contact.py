@@ -16,6 +16,7 @@ class ContactHelper:
         # submit contact creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.app.return_to_home_page()
+        self.contact_cache = None
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -24,6 +25,7 @@ class ContactHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        self.contact_cache = None
 
     def select_first_contact(self):
         wd = self.app.wd
@@ -40,6 +42,7 @@ class ContactHelper:
         # submit modification
         wd.find_element_by_name("update").click()
         self.app.return_to_home_page()
+        self.contact_cache = None
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -76,16 +79,19 @@ class ContactHelper:
         self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.app.open_home_page()
-        contacts = []
-        table = wd.find_elements_by_xpath("//table[@class='sortcompletecallback-applyZebra']//tr[@name='entry']")
-        for element in table:
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            rows = element.find_elements_by_xpath("td")
-            lastname = rows[1].text
-            firstname = rows[2].text
-            contacts.append(Contact(firstname=firstname, lastname=lastname, id=id))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.app.open_home_page()
+            self.contact_cache = []
+            table = wd.find_elements_by_xpath("//table[@class='sortcompletecallback-applyZebra']//tr[@name='entry']")
+            for element in table:
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                rows = element.find_elements_by_xpath("td")
+                lastname = rows[1].text
+                firstname = rows[2].text
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id))
+        return list(self.contact_cache)
 
