@@ -45,7 +45,7 @@ class ContactHelper:
         self.app.open_home_page()
         self.select_contact_by_index(index)
         # open contact modification form
-        wd.find_element_by_xpath("//img[@title='Edit']").click()
+        wd.find_elements_by_xpath("//img[@title='Edit']")[index].click()
         # fill contact form
         self.fill_contact_form(new_contact_data, modify=True)
         # submit modification
