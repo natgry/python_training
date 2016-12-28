@@ -32,6 +32,18 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         self.contact_cache = None
 
+    def delete_all_contacts(self):
+        wd = self.app.wd
+        self.app.open_home_page()
+        nmb_contacts = self.count()
+        if nmb_contacts != 0:
+            for ndx in range(0, nmb_contacts):
+                self.select_contact_by_index(ndx)
+            # submit deletion
+            wd.find_element_by_xpath("//input[@value='Delete']").click()
+            wd.switch_to_alert().accept()
+            self.contact_cache = None
+
     def select_first_contact(self):
         self.select_contact_by_index(0)
 

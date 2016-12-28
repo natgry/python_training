@@ -33,6 +33,18 @@ class GroupHelper:
         self.return_to_groups_page()
         self.group_cache = None
 
+    def delete_all_groups(self):
+        wd = self.app.wd
+        self.open_groups_page()
+        nmb_groups = self.count()
+        if nmb_groups != 0:
+            for ndx in range(0, nmb_groups):
+                self.select_group_by_index(ndx)
+            # submit deletion
+            wd.find_element_by_name("delete").click()
+            self.group_cache = None
+        self.return_to_groups_page()
+
     def select_first_group(self):
         self.select_group_by_index(0)
 
