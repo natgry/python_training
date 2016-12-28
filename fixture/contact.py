@@ -104,8 +104,11 @@ class ContactHelper:
                 lastname = cells[1].text
                 firstname = cells[2].text
                 all_phones = cells[5].text
-                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id,
-                                                  all_phones_from_home_page=all_phones))
+                all_emails = cells[4].text
+                address = cells[3].text
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id, address=address,
+                                                  all_phones_from_home_page=all_phones,
+                                                  all_emails_from_home_page=all_emails))
         return list(self.contact_cache)
 
     def open_contact_to_edit_by_index(self, index):
@@ -132,17 +135,28 @@ class ContactHelper:
         mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
         workphone = wd.find_element_by_name("work").get_attribute("value")
         phone2 = wd.find_element_by_name("phone2").get_attribute("value")
+        email = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
+        address2 = wd.find_element_by_name("address2").get_attribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id,
                        homephone=homephone, mobilephone=mobilephone,
-                       workphone=workphone, phone2=phone2)
+                       workphone=workphone, phone2=phone2,
+                       email=email, email2=email2, email3=email3,
+                       address=address, address2=address2)
 
     def get_contact_info_from_view_page(self, index):
         wd = self.app.wd
         self.open_contact_view_by_index(index)
         text = wd.find_element_by_id("content").text
-        homephone = re.search("H: (.*)", text).group(1)
-        mobilephone = re.search("M: (.*)", text).group(1)
-        workphone = re.search("W: (.*)", text).group(1)
-        phone2 = re.search("P: (.*)", text).group(1)
+        homephone = re.search("H: (.*)", text)
+        mobilephone = re.search("M: (.*)", text)
+        workphone = re.search("W: (.*)", text)
+        phone2 = re.search("P: (.*)", text)
+        homephone = '' if homephone is None else homephone.group(1)
+        mobilephone = '' if mobilephone is None else mobilephone.group(1)
+        workphone = '' if workphone is None else workphone.group(1)
+        phone2 = '' if phone2 is None else phone2.group(1)
         return Contact(homephone=homephone, mobilephone=mobilephone,
                        workphone=workphone, phone2=phone2)
