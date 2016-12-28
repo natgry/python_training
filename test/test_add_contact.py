@@ -7,9 +7,9 @@ def test_add_contact(app):
     contact = Contact(firstname="natalia", middlename="alex",
                       lastname="gryaznova", nickname="natgry",
                       title="sfe", company="emc",
-                      address="spb", home="-", mobile="-", work="-", fax="-",
-                      email="natgry@yandex.ru", email2="-", email3="-",
-                      homepage="-", group="[none]", address2="-", phone2="-", notes="-")
+                      address="spb", homephone="123-456", mobilephone="123-456", workphone="123-456", fax="",
+                      email="natgry@yandex.ru", email2="", email3="",
+                      homepage="-", group="[none]", address2="-", phone2="123-456", notes="-")
     app.contact.create(contact)
     assert len(old_contacts) + 1 == app.contact.count()
     new_contacts = app.contact.get_contact_list()
@@ -22,9 +22,9 @@ def test_add_empty_contact(app):
     contact = Contact(firstname="", middlename="",
                       lastname="", nickname="",
                       title="", company="",
-                      address="", home="", mobile="", work="", fax="",
+                      address="", homephone="123-456", mobilephone="123-456", workphone="123-456", fax="",
                       email="", email2="", email3="",
-                      homepage="", group="[none]", address2="", phone2="", notes="")
+                      homepage="", group="[none]", address2="", phone2="123-456", notes="")
     app.contact.create(contact)
     assert len(old_contacts) + 1 == app.contact.count()
     new_contacts = app.contact.get_contact_list()
