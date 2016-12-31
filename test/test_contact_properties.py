@@ -50,7 +50,7 @@ def test_address_on_home_page(app):
 
 def test_contact_properties_on_home_page(app):
     if app.contact.count() == 0:
-        app.contact.create(Contact(firstname="natalia", lastname="gryaznova", homephone="123-456",
+        app.contact.create(Contact(firstname="natalia", lastname="gryaznova", homephone="002",
                                    email="x@yandex.ru", address="spb", phone2="123-456"))
     contacts = app.contact.get_contact_list()
     index = randrange(len(contacts))
