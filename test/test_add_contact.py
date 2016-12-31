@@ -11,7 +11,7 @@ def random_string(prefix, maxlen):
 
 
 def random_phone(maxlen):
-    symbols = string.digits
+    symbols = "123456789"
     return "".join([random.choice(symbols) for i in range(random.randrange(maxlen))]) + "-" + \
            "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
