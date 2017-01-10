@@ -12,7 +12,17 @@ def test_add_contact(app, data_contacts):
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
 
-def test_add_contact_from_json(app, json_contacts):
+def test_add_contact_from_json_db_check(app, db, json_contacts):
+    contact = json_contacts
+    old_contacts = db.get_contact_list()
+    app.contact.create(contact)
+    assert len(old_contacts) + 1 == len(db.get_contact_list())
+    new_contacts = db.get_contact_list()
+    old_contacts.append(contact)
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+
+
+def test_add_contact_from_json_ui_check(app, json_contacts):
     contact = json_contacts
     old_contacts = app.contact.get_contact_list()
     app.contact.create(contact)
