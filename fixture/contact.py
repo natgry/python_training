@@ -93,6 +93,17 @@ class ContactHelper:
         self.app.return_to_home_page()
         self.contact_cache = None
 
+    def add_contact_to_group_by_id(self, id, group):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(id)
+        # select group
+        wd.find_element_by_xpath("//select[@name='to_group']/option[text()='%s']" % group.name).click()
+        # submit adding
+        wd.find_element_by_xpath("//input[@value='Add to']").click()
+        self.app.return_to_home_page()
+        self.contact_cache = None
+
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
@@ -122,6 +133,7 @@ class ContactHelper:
         self.change_field_value("notes", contact.notes)
         if not modify:
             wd.find_element_by_xpath("//select[@name='new_group']/option[text()='%s']" % contact.group).click()
+
 
     def count(self):
         wd = self.app.wd
