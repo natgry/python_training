@@ -80,6 +80,19 @@ class ContactHelper:
         self.app.return_to_home_page()
         self.contact_cache = None
 
+    def modify_contact_by_id(self, id, new_contact_data):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(id)
+        # open contact modification form
+        wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
+        # fill contact form
+        self.fill_contact_form(new_contact_data, modify=True)
+        # submit modification
+        wd.find_element_by_name("update").click()
+        self.app.return_to_home_page()
+        self.contact_cache = None
+
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
