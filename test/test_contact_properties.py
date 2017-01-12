@@ -70,7 +70,7 @@ def test_phones_on_view_page(app):
                                    mobilephone="123-456", workphone="123-456", phone2="123-456"))
     contacts = app.contact.get_contact_list()
     index = randrange(len(contacts))
-    contact_from_view_page = app.contact.get_contact_info_from_view_page(index)
+    contact_from_view_page = app.contact.get_contact_info_from_view_page_by_index(index)
     contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
     assert contact_from_view_page.homephone == contact_from_edit_page.homephone
     assert contact_from_view_page.mobilephone == contact_from_edit_page.mobilephone

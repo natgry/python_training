@@ -104,6 +104,17 @@ class ContactHelper:
         self.app.return_to_home_page()
         self.contact_cache = None
 
+    def delete_contact_from_group_by_id(self, id, group):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(id)
+        self.open_contact_view_by_id(id)
+        wd.find_element_by_css_selector("a[href='./index.php?group=%s']" % group.id).click()
+        self.select_contact_by_id(id)
+        wd.find_element_by_name("remove").click()
+        self.app.return_to_home_page()
+        self.contact_cache = None
+
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
@@ -133,7 +144,6 @@ class ContactHelper:
         self.change_field_value("notes", contact.notes)
         if not modify:
             wd.find_element_by_xpath("//select[@name='new_group']/option[text()='%s']" % contact.group).click()
-
 
     def count(self):
         wd = self.app.wd
@@ -175,6 +185,13 @@ class ContactHelper:
         # open contact view form
         wd.find_elements_by_xpath("//img[@title='Details']")[index].click()
 
+    def open_contact_view_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(id)
+        # open contact view form
+        wd.find_element_by_css_selector("a[href='view.php?id=%s']" % id).click()
+
     def get_contact_info_from_edit_page(self, index):
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
@@ -196,9 +213,24 @@ class ContactHelper:
                        email=email, email2=email2, email3=email3,
                        address=address, address2=address2)
 
-    def get_contact_info_from_view_page(self, index):
+    def get_contact_info_from_view_page_by_index(self, index):
         wd = self.app.wd
         self.open_contact_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        homephone = re.search("H: (.*)", text)
+        mobilephone = re.search("M: (.*)", text)
+        workphone = re.search("W: (.*)", text)
+        phone2 = re.search("P: (.*)", text)
+        homephone = '' if homephone is None else homephone.group(1)
+        mobilephone = '' if mobilephone is None else mobilephone.group(1)
+        workphone = '' if workphone is None else workphone.group(1)
+        phone2 = '' if phone2 is None else phone2.group(1)
+        return Contact(homephone=homephone, mobilephone=mobilephone,
+                       workphone=workphone, phone2=phone2)
+
+    def get_contact_info_from_view_page_by_id(self, id):
+        wd = self.app.wd
+        self.open_contact_view_by_id(id)
         text = wd.find_element_by_id("content").text
         homephone = re.search("H: (.*)", text)
         mobilephone = re.search("M: (.*)", text)

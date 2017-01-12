@@ -44,6 +44,33 @@ def test_add_contact_to_group(app, db, orm, check_ui):
         assert sorted(new_contacts, key=Contact.id_or_max) == sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
 
 
+def test_delete_contact_from_group(app, db, orm, check_ui):
+    if len(db.get_group_list()) == 0:
+        app.group.create(Group(name="test"))
+    groups = db.get_group_list()
+    group = random.choice(groups)
+
+    if len(db.get_contact_list()) == 0:
+        app.contact.create(Contact(firstname="natalia", middlename="alexandrovna", lastname="gryaznova",
+                                   homephone="123-456", mobilephone="123-456", workphone="123-456", phone2="123-456"))
+    old_contacts = db.get_contact_list()
+    contact = random.choice(old_contacts)
+    app.contact.add_contact_to_group_by_id(contact.id, group)
+    new_contacts = db.get_contact_list()
+    assert len(old_contacts) == len(new_contacts)
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+
+    contacts_in_group = orm.get_contacts_in_group(group)
+    assert contact.id in list(map(lambda x: x.id, contacts_in_group))
+
+    app.contact.delete_contact_from_group_by_id(contact.id, group)
+    contacts_not_in_group = orm.get_contacts_not_in_group(group)
+    assert contact.id in list(map(lambda x: x.id, contacts_not_in_group))
+
+    if check_ui:
+        assert sorted(new_contacts, key=Contact.id_or_max) == sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
+
+
 def test_modify_some_contact_name(app):
     from random import randrange
     if app.contact.count() == 0:
