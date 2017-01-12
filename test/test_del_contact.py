@@ -3,7 +3,7 @@ import random
 from time import sleep
 
 
-def test_delete_some_contact_by_id(app, db, check_ui):
+def test_delete_contact_by_id_with_db_check(app, db, check_ui):
     if len(db.get_contact_list()) == 0:
         app.contact.create(Contact(firstname="natalia", lastname="gryaznova", homephone="123-456",
                                    mobilephone="123-456", workphone="123-456", phone2="123-456"))
